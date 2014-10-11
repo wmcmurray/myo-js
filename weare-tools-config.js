@@ -7,7 +7,7 @@ module.exports = {
 	version: '1.0.0',
 
 	// Name of the project
-	name: 'Myo js',
+	name: 'Myo-js',
 
 	// A list of peoples that participated in this project
 	authors: [
@@ -63,10 +63,21 @@ module.exports = {
 			{
 				"js": [
 
-				// the "api only" version
+				// contains all myo-js's dependencies
+				{
+					"name": "myo-dependencies",
+					"vendors": true,
+					"basepath": "assets/vendors/js/",
+					"dist": "dist/",
+					"src": [
+						"jquery/jquery.min.js",
+						"gsap/TweenMax.min.js",
+					]
+				},
+
+				// contains myo-js api's files
 				{
 					"name": "myo",
-					"vendors": false,
 					"basepath": "assets/js/",
 					"dist": "dist/",
 					"src": [
@@ -75,16 +86,15 @@ module.exports = {
 					]
 				},
 
-				// the "full featured" version, including all required vendors
+				// contains the websites navigation functionnalities
 				{
-					"name": "myo.full",
-					"vendors": false,
-					"basepath": "assets/",
+					"name": "myo-website",
+					"basepath": "assets/js/",
 					"dist": "dist/",
 					"src": [
-						"vendors/js/jquery/jquery.min.js",
-						"js/Myo.js",
-						"js/MyoJS.js",
+						"Myo.js",
+						"MyoJS.js",
+						"MyoWebsite.js",
 					]
 				}
 				],

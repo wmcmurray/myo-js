@@ -5,6 +5,9 @@
 	var WS_ADRESS = 'ws://'+WS_HOST+':'+WS_PORT+'/myo/';
 	var API_VERSION = 1;
 
+	/**
+	 *	The main class of this app acting as a myo devices controller
+	 */
 	function MyoJS()
 	{
 		this.devices = [];
@@ -24,12 +27,12 @@
 		}
 		else
 		{
-			error('You need a browser that supports websocket to use your Myo on the web.');
+			console.error('You need a browser that supports websocket to use your Myo on the web.');
 		}
 	};
 
 	/**
-	 *	Return all myo devices
+	 *	Return all myo armband devices instances
 	 */
 	p.getDevices = function()
 	{
@@ -58,14 +61,6 @@
 	};
 
 	/**
-	 *	Log an error
-	 */
-	function error(msg)
-	{
-		console.warn(msg);
-	};
-
-	/**
 	 *	Handle messages received by websocket
 	 */
 	function onMessageHandler(message)
@@ -87,6 +82,7 @@
 					{
 						case 'paired' :
 						case 'connected' :
+						case 'arm_lost' :
 							this.devices[id].setStatus(data[1].type);
 						break;
 

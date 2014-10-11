@@ -1,29 +1,24 @@
 (function(window)
 {
+	/**
+	 *	Represents a single myo armband device
+	 */
 	function Myo(id)
 	{
 		this.id = id;
-		this.status = 'not-paired';
+		this.status = null;
 		this.arm = null;
 		this.direction = null;
 		this.accelerometer = {};
 		this.gyroscope = {};
 		this.orientation = {};
-		this.pose = 'rest';
+		this.pose = null;
 	};
 
 	var p = Myo.prototype;
 
 	/**
-	 *	Initialize the myo detection
-	 */
-	p.init = function()
-	{
-		
-	};
-
-	/**
-	 *	Set the myo status (paired | connected)
+	 *	Set the myo status (paired | connected | arm_lost)
 	 */
 	p.setStatus = function(status)
 	{
@@ -31,7 +26,7 @@
 	};
 
 	/**
-	 *	Set the myo status (paired | connected)
+	 *	Set the myo arm data
 	 */
 	p.setArm = function(data)
 	{
@@ -40,7 +35,7 @@
 	};
 
 	/**
-	 *	Initialize the myo detection
+	 *	Set device orientation data
 	 */
 	p.setOrientation = function(data)
 	{
@@ -50,7 +45,7 @@
 	};
 
 	/**
-	 *	Initialize the myo detection
+	 *	Set hand pose data
 	 */
 	p.setPose = function(data)
 	{

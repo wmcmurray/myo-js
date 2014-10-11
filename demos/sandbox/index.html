@@ -2,7 +2,14 @@
 <html>
 <head>
 	<title>Myo sandbox</title>
-	<script type="text/javascript" src="../../dist/myo.full.min.js"></script>
+
+	<!-- myo-js dependencies compiled into one file (jQuery & TweenMax) -->
+	<script type="text/javascript" src="../../dist/myo-dependencies.min.js"></script>
+
+	<!-- myo-js api -->
+	<script type="text/javascript" src="../../dist/myo.min.js"></script>
+
+	<!-- some styling -->
 	<link rel="stylesheet" type="text/css" href="../_shared/css/all.css">
 </head>
 <body>
@@ -28,20 +35,18 @@
 	<!-- INITIALIZE THE DEMO -->
 	<script type="text/javascript">
 
-		var output = jQuery('#data');
-
-		// init myo-js
+		// initialize myo-js device detection
 		MyoJS.init();
 
+		// update data table interval
 		setInterval(function()
 		{
 			var devices = MyoJS.getDevices(), device, headers = '', str = '';
-			
-			// console.log(devices[0]);
 
 			headers += '<tr>';
 			headers += '<th width="100">Image</th>';
 			headers += '<th width="50">#ID</th>';
+			headers += '<th width="50">Status</th>';
 			headers += '<th width="50">Arm</th>';
 			headers += '<th width="100">Direction</th>';
 			headers += '<th>Accelerometer</th>';
@@ -56,6 +61,7 @@
 				str += '<tr>';
 				str += '<td><img src="../_shared/images/myo.png" width="100"></td>';
 				str += '<td>'+device.id+'</td>';
+				str += '<td>'+device.status+'</td>';
 				str += '<td>'+device.arm+'</td>';
 				str += '<td>'+device.direction+'</td>';
 				str += '<td>0: '+device.accelerometer[0]+'<br>1: '+device.accelerometer[1]+'<br>2: '+device.accelerometer[2]+'<br></td>';
@@ -65,17 +71,11 @@
 				str += '</tr>';
 			}
 
-			if(device.pose == 'fingers_spread')
-			{
-				// device.vibrate();
-				// window.location.reload();
-			}
-
-			output.html('<table class="defined">' + headers + str + '</table>');
+			jQuery('#data').html('<table class="defined">' + headers + str + '</table>');
 
 		}, 1000 / 4);
 
-		// btns
+		// listen click events on buttons
 		jQuery('[data-myo-btn]').on('click', function()
 		{
 			var btn = jQuery(this);
