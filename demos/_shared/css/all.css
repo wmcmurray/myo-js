@@ -1,0 +1,48 @@
+/* http://meyerweb.com/eric/tools/css/reset/ 
+   v2.0 | 20110126
+   License: none (public domain)
+*/
+
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed, 
+figure, figcaption, footer, header, hgroup, 
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	font-size: 100%;
+	font: inherit;
+	vertical-align: baseline;
+}
+/* HTML5 display-role reset for older browsers */
+article, aside, details, figcaption, figure, 
+footer, header, hgroup, menu, nav, section {
+	display: block;
+}
+body {
+	line-height: 1;
+}
+ol, ul {
+	list-style: none;
+}
+blockquote, q {
+	quotes: none;
+}
+blockquote:before, blockquote:after,
+q:before, q:after {
+	content: '';
+	content: none;
+}
+table {
+	border-collapse: collapse;
+	border-spacing: 0;
+}*::-moz-focus-inner{border:0}html{min-height:100%;background:#181816 url(../../_shared/images/bg.png) center bottom repeat-x}body{margin:0;font-family:Arial,sans-serif;font-size:18px;color:#00bbde}.demo{padding:10px}.demo h1{font-size:30px}.demo h2{font-size:20px}.demo h1,.demo h2,.demo h3,.demo h4,.demo h5,.demo h6{margin:2.5em 0 .5em 0}.demo h1:first-child,.demo h2:first-child,.demo h3:first-child,.demo h4:first-child,.demo h5:first-child,.demo h6:first-child{margin-top:.25em}.demo table{text-align:left}.demo table tr th,.demo table tr td{padding:10px;vertical-align:middle}.demo table.defined{width:100%}.demo table.defined:before{content:attr(data-legend);display:block;position:static;margin:10px}.demo table.defined tr th,.demo table.defined tr td{border:1px solid rgba(0,187,222,0.25)}.demo table.defined tr th{background-color:rgba(0,187,222,0.015)}.demo *[data-myo-btn]{-webkit-border-radius:5px;-webkit-background-clip:padding-box;-moz-border-radius:5px;-moz-background-clip:padding;border-radius:5px;background-clip:padding-box;-webkit-transition:all 0.2s;-moz-transition:all 0.2s;-o-transition:all 0.2s;transition:all 0.2s;-webkit-box-shadow:0px 1px 0px rgba(255, 255, 255, 0.5) inset, 0px 10px 10px rgba(255, 255, 255, 0.3) inset, 0px 0px 5px rgba(0, 0, 0, 0.5);-moz-box-shadow:0px 1px 0px rgba(255, 255, 255, 0.5) inset, 0px 10px 10px rgba(255, 255, 255, 0.3) inset, 0px 0px 5px rgba(0, 0, 0, 0.5);box-shadow:0px 1px 0px rgba(255, 255, 255, 0.5) inset, 0px 10px 10px rgba(255, 255, 255, 0.3) inset, 0px 0px 5px rgba(0, 0, 0, 0.5);background:#00bbde;border:none;padding:5px 10px;text-transform:uppercase;color:#181816;cursor:pointer}.demo *[data-myo-btn]:hover,.demo *[data-myo-btn]:focus{outline:0;-webkit-box-shadow:0px 1px 0px rgba(255, 255, 255, 0.5) inset, 0px 10px 10px rgba(255, 255, 255, 0.3) inset, 0px 0px 5px rgba(0, 0, 0, 0.5), 0px 0px 10px rgba(0, 187, 222, 0.5);-moz-box-shadow:0px 1px 0px rgba(255, 255, 255, 0.5) inset, 0px 10px 10px rgba(255, 255, 255, 0.3) inset, 0px 0px 5px rgba(0, 0, 0, 0.5), 0px 0px 10px rgba(0, 187, 222, 0.5);box-shadow:0px 1px 0px rgba(255, 255, 255, 0.5) inset, 0px 10px 10px rgba(255, 255, 255, 0.3) inset, 0px 0px 5px rgba(0, 0, 0, 0.5), 0px 0px 10px rgba(0, 187, 222, 0.5);background-color:#12daff;color:#40403b}

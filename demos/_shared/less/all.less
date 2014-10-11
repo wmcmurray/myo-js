@@ -1,0 +1,122 @@
+@grey: #181816;
+@blue: #00BBDE;
+
+@pathAssets: "../../../assets/";
+
+@import (inline) "@{pathAssets}vendors/css/reset.css";
+@import "@{pathAssets}vendors/less/lesshat.less";
+
+
+
+*::-moz-focus-inner
+{
+	border: 0;
+}
+
+
+
+html
+{
+	min-height: 100%;
+	background: @grey url(../../_shared/images/bg.png) center bottom repeat-x;
+}
+
+body
+{
+	margin: 0px;
+	font-family: Arial, sans-serif;
+	font-size: 18px;
+	color: @blue;
+}
+
+.demo
+{
+	padding: 10px;
+
+	h1
+	{
+		font-size: 30px;
+	}
+
+	h2
+	{
+		font-size: 20px;
+	}
+
+	h1, h2, h3, h4, h5, h6
+	{
+		margin: 2.5em 0px 0.5em 0px;
+
+		&:first-child
+		{
+			margin-top: 0.25em;
+		}
+	}
+
+	table
+	{
+		//width: 100%;
+		text-align: left;
+
+		tr
+		{
+			th, td
+			{
+				padding: 10px;
+				vertical-align: middle;
+			}
+		}
+
+		&.defined
+		{
+			width: 100%;
+
+			&:before
+			{
+				content: attr(data-legend);
+				display: block;
+				position: static;
+				margin: 10px;
+			}
+
+			tr
+			{
+				th, td
+				{
+					border: 1px solid fade(@blue, 25%);
+				}
+
+				th
+				{
+					background-color: fade(@blue, 1.5%);
+				}
+			}
+		}
+	}
+
+	.actions
+	{
+
+	}
+
+	*[data-myo-btn]
+	{
+		.border-radius(5px);
+		.transition(all, 0.2s);
+		.box-shadow(0px 1px 0px rgba(255,255,255,0.5) inset, 0px 10px 10px rgba(255,255,255,0.3) inset, 0px 0px 5px rgba(0,0,0,0.5));
+		background: @blue;
+		border: none;
+		padding: 5px 10px;
+		text-transform: uppercase;
+		color: @grey;
+		cursor: pointer;
+
+		&:hover, &:focus
+		{
+			outline: 0;
+			.box-shadow(0px 1px 0px rgba(255,255,255,0.5) inset, 0px 10px 10px rgba(255,255,255,0.3) inset, 0px 0px 5px rgba(0,0,0,0.5), 0px 0px 10px fade(@blue, 50%));
+			background-color: lighten(@blue, 10%);
+			color: lighten(@grey, 15%);
+		}
+	}
+}

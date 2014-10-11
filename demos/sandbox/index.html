@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Myo sandbox</title>
+	<script type="text/javascript" src="../../dist/myo.full.min.js"></script>
+	<link rel="stylesheet" type="text/css" href="../_shared/css/all.css">
+</head>
+<body>
+	<div class="demo">
+		<h1>Myo armband sandbox</h1>
+
+		<h2>Actions available</h2>
+		<table class="actions defined">
+			<tr>
+				<th width="100">Vibrate</th>
+				<td>
+					<input data-myo-btn="vibrate:short" type="button" value="short">
+					<input data-myo-btn="vibrate:medium" type="button" value="medium">
+					<input data-myo-btn="vibrate:long" type="button" value="long">
+				</td>
+			</tr>
+		</table>
+		
+		<h2>Devices available</h2>
+		<div id="data"></div>
+	</div>
+
+	<!-- INITIALIZE THE DEMO -->
+	<script type="text/javascript">
+
+		var output = jQuery('#data');
+
+		// init myo-js
+		MyoJS.init();
+
+		setInterval(function()
+		{
+			var devices = MyoJS.getDevices(), device, headers = '', str = '';
+			
+			// console.log(devices[0]);
+
+			headers += '<tr>';
+			headers += '<th width="100">Image</th>';
+			headers += '<th width="50">#ID</th>';
+			headers += '<th width="50">Arm</th>';
+			headers += '<th width="100">Direction</th>';
+			headers += '<th>Accelerometer</th>';
+			headers += '<th>Gyroscope</th>';
+			headers += '<th>Orientation</th>';
+			headers += '<th width="150">Pose</th>';
+			headers += '</tr>';
+
+			for(var i in devices)
+			{
+				device = devices[i];
+				str += '<tr>';
+				str += '<td><img src="../_shared/images/myo.png" width="100"></td>';
+				str += '<td>'+device.id+'</td>';
+				str += '<td>'+device.arm+'</td>';
+				str += '<td>'+device.direction+'</td>';
+				str += '<td>0: '+device.accelerometer[0]+'<br>1: '+device.accelerometer[1]+'<br>2: '+device.accelerometer[2]+'<br></td>';
+				str += '<td>0: '+device.gyroscope[0]+'<br>1: '+device.gyroscope[1]+'<br>2: '+device.gyroscope[2]+'<br></td>';
+				str += '<td>x: '+device.orientation.x+'<br>y: '+device.orientation.y+'<br>z: '+device.orientation.z+'<br>w: '+device.orientation.w+'<br></td>';
+				str += '<td>'+device.pose+'</td>';
+				str += '</tr>';
+			}
+
+			if(device.pose == 'fingers_spread')
+			{
+				// device.vibrate();
+				// window.location.reload();
+			}
+
+			output.html('<table class="defined">' + headers + str + '</table>');
+
+		}, 1000 / 4);
+
+		// btns
+		jQuery('[data-myo-btn]').on('click', function()
+		{
+			var btn = jQuery(this);
+			var data = btn.data('myo-btn').split(':');
+			var action = data[0];
+			var devices = MyoJS.getDevices(), device;
+
+			for(var i in devices)
+			{
+				device = devices[i];
+				
+				switch(action)
+				{
+					case 'vibrate' :
+						device.vibrate(data[1] || 'short');
+					break;
+				}
+			}
+		});
+	</script>
+</body>
+</html>
