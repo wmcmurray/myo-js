@@ -14,9 +14,14 @@
 	/**
 	 *	The main class of this app acting as a myo devices controller
 	 *	@fires NEW_DEVICE When a device is ready to be used
+	 *	@fires SOCKET_MESSAGE
+	 *	@fires SOCKET_EVENT
+	 *	@fires SOCKET_OPENED
+	 *	@fires SOCKET_CLOSED
 	 */
 	function MyoJS()
 	{
+		this.enabled = false;
 		this.devices = [];
 		this.plugins = {};
 
@@ -33,6 +38,8 @@
 		{
 			this.socket = new WebSocket(WS_ADRESS + API_VERSION);
 			this.socket.onmessage = onMessageHandler.bind(this);
+			this.socket.onopen = onOpenHandler.bind(this);
+			this.socket.onclose = onCloseHandler.bind(this);
 		}
 		else
 		{
@@ -110,6 +117,8 @@
 	 */
 	function onMessageHandler(message)
 	{
+		this.emit('SOCKET_MESSAGE', message);
+
 		if(message.data)
 		{
 			var data = JSON.parse(message.data);
@@ -124,6 +133,9 @@
 			switch(data[0])
 			{
 				case 'event' :
+
+					this.emit('SOCKET_EVENT', data[1]);
+
 					switch(data[1].type)
 					{
 						case 'paired' :
@@ -133,12 +145,17 @@
 						case 'connected' :
 							this.devices[id].setStatus(data[1].type);
 						break;
-
-						case 'arm_lost' :
+						
+						case 'disconnected' :
 							this.devices[id].setStatus(data[1].type);
 						break;
 
+						case 'arm_lost' :
+							this.devices[id].setArmStatus(data[1].type);
+						break;
+
 						case 'arm_recognized' :
+							this.devices[id].setArmStatus(data[1].type);
 							this.devices[id].setArm(data[1]);
 						break;
 
@@ -161,6 +178,26 @@
 				break;
 			}
 		}
+	}
+
+	/**
+	 *	Triggered when the socket is opened
+	 */
+	function onOpenHandler(evt)
+	{
+		this.enabled = true;
+		// console.log('Socket opened:', evt);
+		this.emit('SOCKET_OPENED');
+	}
+
+	/**
+	 *	Triggered when an error occur
+	 */
+	function onCloseHandler(evt)
+	{
+		this.enabled = false;
+		// console.error('Socket closed:', evt.code, evt.reason);
+		this.emit('SOCKET_CLOSED');
 	}
 
 	/**

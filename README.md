@@ -1,8 +1,8 @@
 myo-js
 ======
 
-An API for using Myo armband on the web. The Myo Connect application have to be running on user's computer for this to work.
-
+An API for using the Myo armband on the web.
+**The Myo Connect application have to be running** on user's computer for this to work.
 
 Project's state
 ======
@@ -16,5 +16,8 @@ Available demos
 Todo
 ======
 - [ ] Use Y velocity with spread fingers pose instead of wave in/out in the website navigator
+- [ ] Save last "locked" state of website plugin in a cookie to keep the same state between pages
+- [ ] Handle bluetooth strength data
 - [ ] Create a demo with a 3D device rotating at the center with orientation datas
+- [ ] Integrates all of this into nodejs ? maybe ?
 - [ ] Integrates the web navigator into chrome & firefox extensions to enable myo support on all websites of the entire world ! 

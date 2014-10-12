@@ -22,6 +22,7 @@
 	/**
 	 *	Represents a single myo armband device
 	 *	@fires STATUS_CHANGED When the device status changes
+	 *	@fires ARM_STATUS_CHANGED
 	 *	@fires ARM_CHANGED 
 	 *	@fires POSE_CHANGED When the hand pose change
 	 *	@fires POSE_RELEASED When the hand pose is replaced by an other
@@ -31,6 +32,7 @@
 	{
 		this.id = id;
 		this.status = null;
+		this.armStatus = null;
 		this.arm = null;
 		this.direction = null;
 		this.accelerometer = {};
@@ -46,13 +48,32 @@
 	var p = Myo.prototype;
 
 	/**
-	 *	Set the myo status (paired | connected | arm_lost)
+	 *	Return true of false is the device is ready to be used
+	 *	@return {bool}
+	 */
+	p.isReady = function()
+	{
+		return this.status == 'connected' && this.armStatus == 'arm_recognized' ? true : false;
+	};
+
+	/**
+	 *	Set the myo status (paired | connected | disconnected)
 	 */
 	p.setStatus = function(status)
 	{
 		this.status = status;
 
 		this.emit('STATUS_CHANGED', this.status);
+	};
+
+	/**
+	 *	Set the myo arm status (arm_lost | arm_recognized)
+	 */
+	p.setArmStatus = function(status)
+	{
+		this.armStatus = status;
+
+		this.emit('ARM_STATUS_CHANGED', this.armStatus);
 	};
 
 	/**

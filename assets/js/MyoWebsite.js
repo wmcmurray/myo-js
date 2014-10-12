@@ -14,16 +14,19 @@
 	{
 		// properties
 		this.device = null;
-		this.enabled = true;
+		this.locked = true;
 		this.focusLock = false;
-
-		// events listeners
-		MyoJS.on('NEW_DEVICE', onNewDeviceHandler.bind(this));
-		win.on('focus', onWindowFocusHandler.bind(this));
-		win.on('blur', onWindowBlurHandler.bind(this));
 
 		// initialization
 		this.initIndicator();
+		this.disable(0);
+
+		// events listeners
+		MyoJS.on('SOCKET_OPENED', onSocketOpenedHandler.bind(this));
+		MyoJS.on('SOCKET_CLOSED', onSocketClosedHandler.bind(this));
+		MyoJS.on('NEW_DEVICE', onNewDeviceHandler.bind(this));
+		win.on('focus', onWindowFocusHandler.bind(this));
+		win.on('blur', onWindowBlurHandler.bind(this));
 	};
 
 	var p = MyoWebsite.prototype;
@@ -38,7 +41,7 @@
 			borderRadius: '50%',
 			position: 'fixed',
 			right: '50%',
-			bottom: INDICATOR_DECAL + 'px',
+			bottom: -INDICATOR_SIZE + 'px',
 			zIndex: 999999,
 			width: INDICATOR_SIZE + 'px',
 			height: INDICATOR_SIZE + 'px',
@@ -50,26 +53,36 @@
 			cursor: 'default',
 		});
 
-		TweenMax.set(this.indicator, {scale: 0, opacity: 0, transformOrigin: '50% 100%'});
-
 		jQuery('body').append(this.indicator);
 	};
 
 	/**
 	 *	Update the indicator state
 	 */
-	p.updateIndicator = function()
+	p.updateIndicator = function(speed)
 	{
-		var ready = this.enabled ? true : false; //  && this.device.status == 'connected'
+		if(typeof speed == 'undefined')
+			speed = 0.25;
+
+		var ready = !this.locked && this.device.isReady() ? true : false;
 
 		this.indicator
-			.html(this.device.pose)
+			.html(this.device.pose ? this.device.pose : (ready ? 'Myo ready' : '...') )
 			.attr('title', this.device.status);
 
-		TweenMax.to(this.indicator, 0.25,
+		if(this.device.pose == Myo.POSE_THUMB_TO_PINKY)
+		{
+			if(this.unlockTimer)
+				this.indicator.html(this.unlockTimerCounter > 0 ? 'Unlocking '+this.unlockTimerCounter+'...' : 'Unlocked !');
+
+			else if(this.lockTimer)
+				this.indicator.html(this.lockTimerCounter > 0 ? 'Locking '+this.lockTimerCounter+'...' : 'Locked.');
+		}
+
+		TweenMax.to(this.indicator, speed,
 		{
 			opacity: (ready ? 1 : 0.5),
-			boxShadow: "0px 0px 0px " + (this.enabled ? "3px" : "0px") + " #00BBDE",
+			boxShadow: "0px 0px 0px " + (ready ? "3px" : "0px") + " #00BBDE",
 			scale: (ready ? 1 : 0.5),
 			ease: Quint.easeInOut
 		});
@@ -81,12 +94,12 @@
 	p.startLockTimer = function()
 	{
 		this.device.vibrate(Myo.VIBRATE_SHORT);
-		this.lockTimerCounter = 0;
+		this.lockTimerCounter = 2;
 		this.lockTimer = setInterval(function()
 		{
-			this.lockTimerCounter++;
+			this.lockTimerCounter--;
 
-			if(this.lockTimerCounter >= 2)
+			if(this.lockTimerCounter <= 0)
 			{
 				this.lock();
 				this.device.vibrate(Myo.VIBRATE_MEDIUM);
@@ -94,6 +107,7 @@
 			else
 			{
 				this.device.vibrate(Myo.VIBRATE_SHORT);
+				this.updateIndicator();
 			}
 
 		}.bind(this), 1000);
@@ -105,6 +119,7 @@
 	p.stopLockTimer = function()
 	{
 		clearInterval(this.lockTimer);
+		this.lockTimer = null;
 	};
 
 	/**
@@ -113,12 +128,14 @@
 	p.startUnlockTimer = function()
 	{
 		this.device.vibrate(Myo.VIBRATE_SHORT);
-		this.unlockTimerCounter = 0;
+		this.unlockTimerCounter = 2;
 		this.unlockTimer = setInterval(function()
 		{
-			this.unlockTimerCounter++;
+			this.unlockTimerCounter--;
 
-			if(this.unlockTimerCounter >= 2)
+			this.updateIndicator();
+
+			if(this.unlockTimerCounter <= 0)
 			{
 				this.unlock();
 				this.device.vibrate(Myo.VIBRATE_MEDIUM);
@@ -126,6 +143,7 @@
 			else
 			{
 				this.device.vibrate(Myo.VIBRATE_SHORT);
+				this.updateIndicator();
 			}
 
 		}.bind(this), 1000);
@@ -137,6 +155,7 @@
 	p.stopUnlockTimer = function()
 	{
 		clearInterval(this.unlockTimer);
+		this.unlockTimer = null;
 	};
 
 	/**
@@ -144,9 +163,9 @@
 	 */
 	p.lock = function()
 	{
-		this.stopLockTimer();
-		this.enabled = false;
+		this.locked = true;
 		this.updateIndicator();
+		this.stopLockTimer();
 	};
 
 	/**
@@ -154,9 +173,31 @@
 	 */
 	p.unlock = function()
 	{
-		this.stopUnlockTimer();
-		this.enabled = true;
+		this.locked = false;
 		this.updateIndicator();
+		this.stopUnlockTimer();
+	};
+
+	/**
+	 *	Enable the plugin (display visual stuff in DOM)
+	 */
+	p.enable = function(speed)
+	{
+		if(typeof speed == 'undefined')
+			speed = 0.5;
+
+		TweenMax.to(this.indicator, speed, {opacity: 1, bottom: INDICATOR_DECAL + 'px', transformOrigin: '50% 100%', ease: Quint.easeInOut});
+	};
+
+	/**
+	 *	Disable the plugin (hide visual stuff in DOM)
+	 */
+	p.disable = function(speed)
+	{
+		if(typeof speed == 'undefined')
+			speed = 0.5;
+
+		TweenMax.to(this.indicator, speed, {opacity: 0, bottom: -INDICATOR_SIZE + 'px', transformOrigin: '50% 100%', ease: Quint.easeInOut});
 	};
 
 	/**
@@ -197,6 +238,22 @@
 	}
 
 	/**
+	 *	Triggered when the myo-js socket is ready
+	 */
+	function onSocketOpenedHandler()
+	{
+		this.enable();
+	}
+
+	/**
+	 *	Triggered when the myo-js socket is closed
+	 */
+	function onSocketClosedHandler()
+	{
+		this.disable();
+	}
+
+	/**
 	 *	Triggered when a new device is ready
 	 */
 	function onNewDeviceHandler(device)
@@ -204,6 +261,7 @@
 		this.device = device;
 
 		this.device.on('STATUS_CHANGED', onDeviceStatusChangedHandler.bind(this));
+		this.device.on('ARM_STATUS_CHANGED', onDeviceArmStatusChangedHandler.bind(this));
 		this.device.on('POSE_ADOPTED', onDevicePoseAdoptedHandler.bind(this));
 		this.device.on('POSE_RELEASED', onDevicePoseReleasedHandler.bind(this));
 		this.device.on('ARM_CHANGED', onDeviceArmChangedHandler.bind(this));
@@ -221,7 +279,7 @@
 			switch(pose)
 			{
 				case Myo.POSE_THUMB_TO_PINKY :
-					if(!this.enabled)
+					if(this.locked)
 					{
 						this.startUnlockTimer();
 					}
@@ -232,28 +290,28 @@
 				break;
 
 				case Myo.POSE_FINGERS_SPREAD :
-					if(this.enabled)
+					if(!this.locked)
 					{
 						// MyoScrollManager.top();
 					}
 				break;
 
 				case Myo.POSE_WAVE_IN :
-					if(this.enabled)
+					if(!this.locked)
 					{
 						MyoScrollManager.translate(0, getScrollStep.call(this, 'in'));
 					}
 				break;
 
 				case Myo.POSE_WAVE_OUT :
-					if(this.enabled)
+					if(!this.locked)
 					{
 						MyoScrollManager.translate(0, getScrollStep.call(this, 'out'));
 					}
 				break;
 
 				case Myo.POSE_FIST :
-					if(this.enabled)
+					if(!this.locked)
 					{
 						MyoScrollManager.top();
 					}
@@ -272,7 +330,7 @@
 		switch(pose)
 		{
 			case Myo.POSE_THUMB_TO_PINKY :
-				if(this.enabled)
+				if(!this.locked)
 				{
 					this.stopLockTimer();
 				}
@@ -291,8 +349,31 @@
 	{
 		switch(status)
 		{
+			case 'disconnected' :
+				this.lock();
+			break;
+
+			case 'connected' :
+				this.unlock();
+			break;
+		}
+
+		this.updateIndicator();
+	}
+
+	/**
+	 *	Triggered when a device's arm status changed
+	 */
+	function onDeviceArmStatusChangedHandler(status)
+	{
+		switch(status)
+		{
 			case 'arm_lost' :
-				// this.lock();
+				this.lock();
+			break;
+
+			case 'arm_recognized' :
+				this.unlock();
 			break;
 		}
 
@@ -304,7 +385,7 @@
 	 */
 	function onDeviceArmChangedHandler(arm, direction)
 	{
-		TweenMax.to(this.indicator, 1,
+		TweenMax.set(this.indicator,
 		{
 			transformOrigin: (arm == 'right' ? '100% 100%' : '0% 100%'),
 			left: (arm == 'left' ? INDICATOR_DECAL + 'px' : 'auto'),
