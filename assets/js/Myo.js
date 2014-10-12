@@ -21,12 +21,13 @@
 
 	/**
 	 *	Represents a single myo armband device
-	 *	@fires STATUS_CHANGED When the device status changes
-	 *	@fires ARM_STATUS_CHANGED
-	 *	@fires ARM_CHANGED 
-	 *	@fires POSE_CHANGED When the hand pose change
-	 *	@fires POSE_RELEASED When the hand pose is replaced by an other
-	 *	@fires POSE_ADOPTED When the hand pose is adopted
+	 *
+	 *	@fires STATUS_CHANGED - When the device status changes
+	 *	@fires ARM_STATUS_CHANGED - 
+	 *	@fires ARM_CHANGED - 
+	 *	@fires POSE_CHANGED - When the hand pose change
+	 *	@fires POSE_RELEASED - When the hand pose is replaced by an other
+	 *	@fires POSE_ADOPTED - When the hand pose is adopted
 	 */
 	function Myo(id)
 	{

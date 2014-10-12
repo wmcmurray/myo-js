@@ -2,7 +2,7 @@
 	'use strict';
 
 	var win = jQuery(window);
-	var INDICATOR_SIZE = 75;
+	var INDICATOR_SIZE = 50;
 	var INDICATOR_DECAL = 10;
 
 	/**
@@ -10,7 +10,7 @@
 	 *	inside a website using his myo armband.
 	 *	@args {array} Arguments passed to the pluginInit method of MyoJS
 	 */
-	function MyoWebsite(args)
+	function MyoWebNavigator(args)
 	{
 		// properties
 		this.device = null;
@@ -29,7 +29,7 @@
 		win.on('blur', onWindowBlurHandler.bind(this));
 	};
 
-	var p = MyoWebsite.prototype;
+	var p = MyoWebNavigator.prototype;
 
 	/**
 	 *	Initialize the little indicator displayed inside the DOM
@@ -46,12 +46,21 @@
 			width: INDICATOR_SIZE + 'px',
 			height: INDICATOR_SIZE + 'px',
 			marginRight: -(INDICATOR_SIZE * 0.5) + 'px',
-			backgroundColor: '#333',
+			backgroundColor: MyoJS.COLOR_DARK,
 			textAlign: 'center',
 			fontSize: '13px',
 			lineHeight: INDICATOR_SIZE + 'px',
-			cursor: 'default',
+			color: MyoJS.COLOR_BLUE,
+			cursor: 'pointer',
 		});
+
+		this.indicator.on('click', function()
+		{
+			if(this.locked)
+				this.unlock();
+			else
+				this.lock();
+		}.bind(this));
 
 		jQuery('body').append(this.indicator);
 	};
@@ -65,24 +74,25 @@
 			speed = 0.25;
 
 		var ready = !this.locked && this.device.isReady() ? true : false;
+		var image = MyoJS.assets.getPoseImage(this.device);
 
 		this.indicator
-			.html(this.device.pose ? this.device.pose : (ready ? 'Myo ready' : '...') )
-			.attr('title', this.device.status);
+			.html(this.device.pose ? (image ? '<img src="'+image+'" alt="'+this.device.pose+'" style="width:100%;height:auto;display:block;">' : '') : (ready ? 'Myo' : '...') )
+			.attr('title', this.device.status + ' - ' + this.device.armStatus);
 
 		if(this.device.pose == Myo.POSE_THUMB_TO_PINKY)
 		{
 			if(this.unlockTimer)
-				this.indicator.html(this.unlockTimerCounter > 0 ? 'Unlocking '+this.unlockTimerCounter+'...' : 'Unlocked !');
+				this.indicator.html(this.unlockTimerCounter > 0 ? this.unlockTimerCounter : 'Unlocked');
 
 			else if(this.lockTimer)
-				this.indicator.html(this.lockTimerCounter > 0 ? 'Locking '+this.lockTimerCounter+'...' : 'Locked.');
+				this.indicator.html(this.lockTimerCounter > 0 ? this.lockTimerCounter: 'Locked');
 		}
 
 		TweenMax.to(this.indicator, speed,
 		{
 			opacity: (ready ? 1 : 0.5),
-			boxShadow: "0px 0px 0px " + (ready ? "3px" : "0px") + " #00BBDE",
+			boxShadow: "0px 0px 15px rgba(0,0,0,0.5), 0px 0px 0px " + (ready ? "2px" : "0px") + " " + MyoJS.COLOR_BLUE,
 			scale: (ready ? 1 : 0.5),
 			ease: Quint.easeInOut
 		});
@@ -413,6 +423,7 @@
 		this.stopUnlockTimer();
 	}
 
-	MyoJS.registerPlugin('website', MyoWebsite);
+	// register the plugin
+	MyoJS.registerPlugin('webnavigator', MyoWebNavigator);
 
 })(window);

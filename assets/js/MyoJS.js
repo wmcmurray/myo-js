@@ -13,11 +13,14 @@
 
 	/**
 	 *	The main class of this app acting as a myo devices controller
-	 *	@fires NEW_DEVICE When a device is ready to be used
-	 *	@fires SOCKET_MESSAGE
-	 *	@fires SOCKET_EVENT
-	 *	@fires SOCKET_OPENED
-	 *	@fires SOCKET_CLOSED
+	 *
+	 *	@fires NEW_DEVICE - When a device is ready to be used (args: deviceInstance)
+	 *	@fires PLUGIN_INIT - When a plugin is instanciated (args: pluginName, pluginInstance)
+	 *	@fires READY - When initialization of the class and all plugins is over
+	 *	@fires SOCKET_MESSAGE - When the socket receive a message (args: rawSocketMessageString)
+	 *	@fires SOCKET_EVENT - 
+	 *	@fires SOCKET_OPENED - 
+	 *	@fires SOCKET_CLOSED - 
 	 */
 	function MyoJS()
 	{
@@ -40,21 +43,18 @@
 			this.socket.onmessage = onMessageHandler.bind(this);
 			this.socket.onopen = onOpenHandler.bind(this);
 			this.socket.onclose = onCloseHandler.bind(this);
+
+			// init plugins
+			this.initPlugins();
 		}
 		else
 		{
 			console.error('You need a browser that supports websocket to use your Myo on the web.');
 		}
 
-		return this;
-	};
+		this.emit('READY');
 
-	/**
-	 *	Return all myo armband devices instances
-	 */
-	p.getDevices = function()
-	{
-		return this.devices;
+		return this;
 	};
 
 	/**
@@ -69,6 +69,27 @@
 	};
 
 	/**
+	 *	Return the specified plugin instance
+	 *	@name {string} Name of the plugin
+	 *	@return {object} The instanciated plugin
+	 */
+	p.getPlugin = function(name)
+	{
+		return typeof this.plugins[name] != 'undefined' && typeof this.plugins[name].instance != 'undefined' ? this.plugins[name].instance : null;
+	};
+
+	/**
+	 *	Initialize all plugins
+	 */
+	p.initPlugins = function()
+	{
+		for(var i in this.plugins)
+		{
+			this.initPlugin(i);
+		}
+	};
+
+	/**
 	 *	Initialize a previously registered plugin
 	 *	@name {string} Name of the plugin
 	 *	[arg1, arg2, arg3...] All other params are passed to the plugin's constructor
@@ -79,9 +100,16 @@
 		{
 			var a = Array.prototype.slice.call(arguments, 1);
 
-			this.plugins[name].instance = new this.plugins[name].constructor(a);
-			
-			// console.log('PLUGIN "'+name+'" INITIALIZED.', a);
+			if(this.plugins[name].instance === null)
+			{
+				this.plugins[name].instance = new this.plugins[name].constructor(a);
+				this.emit('PLUGIN_INIT', name, this.plugins[name].instance);
+				// console.log('PLUGIN "'+name+'" INITIALIZED.', a);
+			}
+			else
+			{
+				console.warn('PLUGIN "'+name+'" ALREADY INITIALIZED.');
+			}
 		}
 		else
 		{
@@ -89,6 +117,14 @@
 		}
 
 		return this;
+	};
+
+	/**
+	 *	Return all myo armband devices instances
+	 */
+	p.getDevices = function()
+	{
+		return this.devices;
 	};
 
 	/**
@@ -217,5 +253,10 @@
 	}
 
 	window.MyoJS = new MyoJS();
+
+	// constants
+	window.MyoJS.COLOR_BLUE = '#00bdde';
+	window.MyoJS.COLOR_DARK = '#141d28';
+	window.MyoJS.COLOR_LIGHT = '#3d3d3d';
 
 })(window);

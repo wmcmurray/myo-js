@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>Myo website navigator</title>
+	<title>Myo website demo</title>
 	<meta charset="utf-8">
 
 	<!-- myo-js dependencies compiled into one file (jQuery & TweenMax) -->
@@ -10,8 +10,11 @@
 	<!-- myo-js api -->
 	<script type="text/javascript" src="../../dist/myo.min.js"></script>
 
-	<!-- myo-js website plugin -->
-	<script type="text/javascript" src="../../dist/myo-website.min.js"></script>
+	<!-- myo-js assets -->
+	<script type="text/javascript" src="../../dist/plugins/myo-assets.min.js"></script>
+
+	<!-- myo-js webnavigator plugin -->
+	<script type="text/javascript" src="../../dist/plugins/myo-webnavigator.min.js"></script>
 
 	<!-- some styling -->
 	<link rel="stylesheet" type="text/css" href="../_shared/css/all.css">
@@ -20,7 +23,7 @@
 	<div class="demo">
 		<div style="width: 75%; max-width: 980px; margin: 0px auto;">
 
-			<h1>Myo armband website navigator</h1>
+			<h1>Myo armband website demo</h1>
 
 			<h2>How to use</h2>
 			<ul>
@@ -136,7 +139,7 @@
 	<script type="text/javascript">
 
 		// initialize myo-js device detection and plugins
-		MyoJS.init().initPlugin('website');
+		MyoJS.init();
 
 	</script>
 </body>

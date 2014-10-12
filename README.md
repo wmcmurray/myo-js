@@ -1,7 +1,5 @@
-myo-js
-======
-
 An API for using the Myo armband on the web.
+
 **The Myo Connect application have to be running** on user's computer for this to work.
 
 Project's state
@@ -11,7 +9,17 @@ It's currently in an early stage so the API may change in the next weeks. I sugg
 Available demos
 ======
 - **Sandbox** : display a list of connected devices with all their datas + vibration buttons
-- **Website navigator** : enable users to scroll in a website with the myo
+- **Webpage** : a fake webpage for testing the webnavigator plugin and such
+
+Available plugins
+======
+- **assets** : contains official assets given by Thalmic labs (poses images in base64 format)
+- **webnavigator** : enable a user to navigate inside a web page with hand gestures
+
+Ressources
+======
+- Design guidelines : https://developer.thalmic.com/ux/
+- Assets : https://developer.thalmic.com/branding/
 
 Todo
 ======

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>Myo sandbox</title>
+	<title>Myo sandbox demo</title>
 	<meta charset="utf-8">
 
 	<!-- myo-js dependencies compiled into one file (jQuery & TweenMax) -->
@@ -10,12 +10,15 @@
 	<!-- myo-js api -->
 	<script type="text/javascript" src="../../dist/myo.min.js"></script>
 
+	<!-- myo-js assets -->
+	<script type="text/javascript" src="../../dist/plugins/myo-assets.min.js"></script>
+
 	<!-- some styling -->
 	<link rel="stylesheet" type="text/css" href="../_shared/css/all.css">
 </head>
 <body>
 	<div class="demo">
-		<h1>Myo armband sandbox</h1>
+		<h1>Myo armband sandbox demo</h1>
 		<meta charset="utf-8">
 
 		<h2>Actions available</h2>
@@ -43,7 +46,7 @@
 		// update data table interval
 		setInterval(function()
 		{
-			var devices = MyoJS.getDevices(), device, headers = '', str = '';
+			var devices = MyoJS.getDevices(), device, headers = '', str = '', image;
 
 			headers += '<tr>';
 			headers += '<th width="100">Image</th>';
@@ -55,12 +58,13 @@
 			headers += '<th>Accelerometer</th>';
 			headers += '<th>Gyroscope</th>';
 			headers += '<th>Orientation</th>';
-			headers += '<th width="150">Pose</th>';
+			headers += '<th width="150" align="center">Pose</th>';
 			headers += '</tr>';
 
 			for(var i in devices)
 			{
 				device = devices[i];
+				image = MyoJS.assets.getPoseImage(device);
 				str += '<tr>';
 				str += '<td><img src="../_shared/images/myo.png" width="100"></td>';
 				str += '<td>'+device.id+'</td>';
@@ -71,7 +75,7 @@
 				str += '<td>0: '+device.accelerometer[0]+'<br>1: '+device.accelerometer[1]+'<br>2: '+device.accelerometer[2]+'<br></td>';
 				str += '<td>0: '+device.gyroscope[0]+'<br>1: '+device.gyroscope[1]+'<br>2: '+device.gyroscope[2]+'<br></td>';
 				str += '<td>x: '+device.orientation.x+'<br>y: '+device.orientation.y+'<br>z: '+device.orientation.z+'<br>w: '+device.orientation.w+'<br></td>';
-				str += '<td>'+device.pose+'</td>';
+				str += '<td align="center">'+(image?'<img src="'+image+'" width="100" alt="'+device.pose+'"><br>'+device.pose:device.pose)+'</td>';
 				str += '</tr>';
 			}
 

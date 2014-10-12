@@ -87,14 +87,24 @@ module.exports = {
 					]
 				},
 
-				// contains myo websites plugin
+				// contains myo webnavigator plugin
 				{
-					"name": "myo-website",
+					"name": "myo-webnavigator",
 					"basepath": "assets/js/",
-					"dist": "dist/",
+					"dist": "dist/plugins/",
 					"src": [
 						"ScrollManager.js",
-						"MyoWebsite.js",
+						"plugins/MyoWebnavigator.js",
+					]
+				},
+
+				// contains myo assets plugin (poses images)
+				{
+					"name": "myo-assets",
+					"basepath": "assets/js/",
+					"dist": "dist/plugins/",
+					"src": [
+						"plugins/MyoAssets.js",
 					]
 				}
 				],
