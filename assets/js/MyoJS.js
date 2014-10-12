@@ -12,7 +12,7 @@
 	MyoJS.prototype.parent = MyoEventsDispatcher.prototype;
 
 	/**
-	 *	The main class of this app acting as a myo devices controller
+	 *	The main class of this app acting as a Myo devices controller
 	 *
 	 *	@fires NEW_DEVICE - When a device is ready to be used (args: deviceInstance)
 	 *	@fires PLUGIN_INIT - When a plugin is instanciated (args: pluginName, pluginInstance)
@@ -32,8 +32,9 @@
 	};
 
 	var p = MyoJS.prototype;
+
 	/**
-	 *	Initialize the myo detection
+	 *	Initialize the Myo API
 	 */
 	p.init = function()
 	{
@@ -120,7 +121,7 @@
 	};
 
 	/**
-	 *	Return all myo armband devices instances
+	 *	Return all Myo armband devices instances
 	 */
 	p.getDevices = function()
 	{
@@ -130,7 +131,7 @@
 	/**
 	 *	Send a command to the websocket
 	 *	@command {string} Command name
-	 *	@id {string} The myo device ID
+	 *	@id {string} The Myo device ID
 	 *	@data {object} Data sended with the command
 	 */
 	p.sendCommand = function(command, id, data)
@@ -162,7 +163,7 @@
 
 			if(typeof this.devices[id] == 'undefined')
 			{
-				this.devices[id] = new window.Myo(id);
+				this.devices[id] = new window.MyoDevice(id);
 				this.emit('NEW_DEVICE', this.devices[id]);
 			}
 

@@ -1,20 +1,10 @@
 An API for using the Myo armband on the web.
 
-**The Myo Connect application have to be running** on user's computer for this to work.
+**The Myo Connect application must be running** on user's computer for this to work.
 
 Project's state
 ======
 It's currently in an early stage so the API may change in the next weeks. I suggest you don't use my code right now but you can take a look at it for sure. :)
-
-Available demos
-======
-- **Sandbox** : display a list of connected devices with all their datas + vibration buttons
-- **Webpage** : a fake webpage for testing the webnavigator plugin and such
-
-Available plugins
-======
-- **assets** : contains official assets given by Thalmic labs (poses images in base64 format)
-- **webnavigator** : enable a user to navigate inside a web page with hand gestures
 
 Ressources
 ======

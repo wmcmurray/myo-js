@@ -80,7 +80,7 @@
 			.html(this.device.pose ? (image ? '<img src="'+image+'" alt="'+this.device.pose+'" style="width:100%;height:auto;display:block;">' : '') : (ready ? 'Myo' : '...') )
 			.attr('title', this.device.status + ' - ' + this.device.armStatus);
 
-		if(this.device.pose == Myo.POSE_THUMB_TO_PINKY)
+		if(this.device.pose == MyoDevice.POSE_THUMB_TO_PINKY)
 		{
 			if(this.unlockTimer)
 				this.indicator.html(this.unlockTimerCounter > 0 ? this.unlockTimerCounter : 'Unlocked');
@@ -103,7 +103,7 @@
 	 */
 	p.startLockTimer = function()
 	{
-		this.device.vibrate(Myo.VIBRATE_SHORT);
+		this.device.vibrate(MyoDevice.VIBRATE_SHORT);
 		this.lockTimerCounter = 2;
 		this.lockTimer = setInterval(function()
 		{
@@ -112,11 +112,11 @@
 			if(this.lockTimerCounter <= 0)
 			{
 				this.lock();
-				this.device.vibrate(Myo.VIBRATE_MEDIUM);
+				this.device.vibrate(MyoDevice.VIBRATE_MEDIUM);
 			}
 			else
 			{
-				this.device.vibrate(Myo.VIBRATE_SHORT);
+				this.device.vibrate(MyoDevice.VIBRATE_SHORT);
 				this.updateIndicator();
 			}
 
@@ -137,7 +137,7 @@
 	 */
 	p.startUnlockTimer = function()
 	{
-		this.device.vibrate(Myo.VIBRATE_SHORT);
+		this.device.vibrate(MyoDevice.VIBRATE_SHORT);
 		this.unlockTimerCounter = 2;
 		this.unlockTimer = setInterval(function()
 		{
@@ -148,11 +148,11 @@
 			if(this.unlockTimerCounter <= 0)
 			{
 				this.unlock();
-				this.device.vibrate(Myo.VIBRATE_MEDIUM);
+				this.device.vibrate(MyoDevice.VIBRATE_MEDIUM);
 			}
 			else
 			{
-				this.device.vibrate(Myo.VIBRATE_SHORT);
+				this.device.vibrate(MyoDevice.VIBRATE_SHORT);
 				this.updateIndicator();
 			}
 
@@ -288,7 +288,7 @@
 		{
 			switch(pose)
 			{
-				case Myo.POSE_THUMB_TO_PINKY :
+				case MyoDevice.POSE_THUMB_TO_PINKY :
 					if(this.locked)
 					{
 						this.startUnlockTimer();
@@ -299,28 +299,28 @@
 					}
 				break;
 
-				case Myo.POSE_FINGERS_SPREAD :
+				case MyoDevice.POSE_FINGERS_SPREAD :
 					if(!this.locked)
 					{
 						// MyoScrollManager.top();
 					}
 				break;
 
-				case Myo.POSE_WAVE_IN :
+				case MyoDevice.POSE_WAVE_IN :
 					if(!this.locked)
 					{
 						MyoScrollManager.translate(0, getScrollStep.call(this, 'in'));
 					}
 				break;
 
-				case Myo.POSE_WAVE_OUT :
+				case MyoDevice.POSE_WAVE_OUT :
 					if(!this.locked)
 					{
 						MyoScrollManager.translate(0, getScrollStep.call(this, 'out'));
 					}
 				break;
 
-				case Myo.POSE_FIST :
+				case MyoDevice.POSE_FIST :
 					if(!this.locked)
 					{
 						MyoScrollManager.top();
@@ -339,7 +339,7 @@
 	{
 		switch(pose)
 		{
-			case Myo.POSE_THUMB_TO_PINKY :
+			case MyoDevice.POSE_THUMB_TO_PINKY :
 				if(!this.locked)
 				{
 					this.stopLockTimer();

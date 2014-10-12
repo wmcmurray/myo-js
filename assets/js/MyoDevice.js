@@ -4,23 +4,23 @@
 	var POSE_EVENTS_EMIT_DELAY = 50;
 
 	// heritence
-	Myo.prototype = new MyoEventsDispatcher;
-	Myo.prototype.constructor = Myo;
-	Myo.prototype.parent = MyoEventsDispatcher.prototype;
+	MyoDevice.prototype = new MyoEventsDispatcher;
+	MyoDevice.prototype.constructor = MyoDevice;
+	MyoDevice.prototype.parent = MyoEventsDispatcher.prototype;
 
 	// constants
-	Myo.POSE_THUMB_TO_PINKY = 'thumb_to_pinky';
-	Myo.POSE_FINGERS_SPREAD = 'fingers_spread';
-	Myo.POSE_WAVE_OUT = 'wave_out';
-	Myo.POSE_WAVE_IN = 'wave_in';
-	Myo.POSE_FIST = 'fist';
-	Myo.POSE_REST = 'rest';
-	Myo.VIBRATE_SHORT = 'short';
-	Myo.VIBRATE_MEDIUM = 'medium';
-	Myo.VIBRATE_LONG = 'long';
+	MyoDevice.POSE_THUMB_TO_PINKY = 'thumb_to_pinky';
+	MyoDevice.POSE_FINGERS_SPREAD = 'fingers_spread';
+	MyoDevice.POSE_WAVE_OUT = 'wave_out';
+	MyoDevice.POSE_WAVE_IN = 'wave_in';
+	MyoDevice.POSE_FIST = 'fist';
+	MyoDevice.POSE_REST = 'rest';
+	MyoDevice.VIBRATE_SHORT = 'short';
+	MyoDevice.VIBRATE_MEDIUM = 'medium';
+	MyoDevice.VIBRATE_LONG = 'long';
 
 	/**
-	 *	Represents a single myo armband device
+	 *	Represents a single Myo armband device
 	 *
 	 *	@fires STATUS_CHANGED - When the device status changes
 	 *	@fires ARM_STATUS_CHANGED - 
@@ -29,7 +29,7 @@
 	 *	@fires POSE_RELEASED - When the hand pose is replaced by an other
 	 *	@fires POSE_ADOPTED - When the hand pose is adopted
 	 */
-	function Myo(id)
+	function MyoDevice(id)
 	{
 		this.id = id;
 		this.status = null;
@@ -46,7 +46,7 @@
 		// this.requestRSSI();
 	};
 
-	var p = Myo.prototype;
+	var p = MyoDevice.prototype;
 
 	/**
 	 *	Return true of false is the device is ready to be used
@@ -58,7 +58,7 @@
 	};
 
 	/**
-	 *	Set the myo status (paired | connected | disconnected)
+	 *	Set the Myo status (paired | connected | disconnected)
 	 */
 	p.setStatus = function(status)
 	{
@@ -68,7 +68,7 @@
 	};
 
 	/**
-	 *	Set the myo arm status (arm_lost | arm_recognized)
+	 *	Set the Myo arm status (arm_lost | arm_recognized)
 	 */
 	p.setArmStatus = function(status)
 	{
@@ -78,7 +78,7 @@
 	};
 
 	/**
-	 *	Set the myo arm data
+	 *	Set the Myo arm data
 	 */
 	p.setArm = function(data)
 	{
@@ -139,7 +139,7 @@
 	p.vibrate = function(intensity, repeat)
 	{
 		if(typeof intensity == 'undefined')
-			intensity = Myo.VIBRATE_SHORT;
+			intensity = MyoDevice.VIBRATE_SHORT;
 
 		if(typeof repeat == 'undefined')
 			repeat = 1;
@@ -171,6 +171,6 @@
 		}
 	}
 
-	window.Myo = Myo;
+	window.MyoDevice = MyoDevice;
 
 })(window);

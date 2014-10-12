@@ -82,7 +82,7 @@ module.exports = {
 					"dist": "dist/",
 					"src": [
 						"EventsDispatcher.js",
-						"Myo.js",
+						"MyoDevice.js",
 						"MyoJS.js",
 					]
 				},
