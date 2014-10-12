@@ -1,4 +1,5 @@
-@grey: #181816;
+@grey-dark: #181816;
+@grey-light: #888;
 @blue: #00BBDE;
 
 @pathAssets: "../../../assets/";
@@ -18,7 +19,7 @@
 html
 {
 	min-height: 100%;
-	background: @grey url(../../_shared/images/bg.png) center bottom repeat-x;
+	background: @grey-dark url(../../_shared/images/bg.png) center bottom repeat-x;
 }
 
 body
@@ -32,6 +33,7 @@ body
 .demo
 {
 	padding: 10px;
+	padding-bottom: 100px;
 
 	h1
 	{
@@ -39,6 +41,11 @@ body
 	}
 
 	h2
+	{
+		font-size: 25px;
+	}
+
+	h3
 	{
 		font-size: 20px;
 	}
@@ -53,6 +60,33 @@ body
 		}
 	}
 
+	p
+	{
+		margin: 1em 0px;
+		line-height: 1.5em;
+		color: @grey-light;
+	}
+
+	img
+	{
+		max-width: 100%;
+		height: auto;
+	}
+
+	ul, ol
+	{
+		li
+		{
+			color: @grey-light;
+			line-height: 1.5em;
+		}
+	}
+
+	ul
+	{
+		list-style: circle inside;
+	}
+
 	table
 	{
 		//width: 100%;
@@ -64,6 +98,11 @@ body
 			{
 				padding: 10px;
 				vertical-align: middle;
+			}
+
+			td
+			{
+				color: @grey-light;
 			}
 		}
 
@@ -108,7 +147,7 @@ body
 		border: none;
 		padding: 5px 10px;
 		text-transform: uppercase;
-		color: @grey;
+		color: @grey-dark;
 		cursor: pointer;
 
 		&:hover, &:focus
@@ -116,7 +155,7 @@ body
 			outline: 0;
 			.box-shadow(0px 1px 0px rgba(255,255,255,0.5) inset, 0px 10px 10px rgba(255,255,255,0.3) inset, 0px 0px 5px rgba(0,0,0,0.5), 0px 0px 10px fade(@blue, 50%));
 			background-color: lighten(@blue, 10%);
-			color: lighten(@grey, 15%);
+			color: lighten(@grey-dark, 15%);
 		}
 	}
 }

@@ -75,25 +75,25 @@ module.exports = {
 					]
 				},
 
-				// contains myo-js api's files
+				// contains myo-js api's files only
 				{
 					"name": "myo",
 					"basepath": "assets/js/",
 					"dist": "dist/",
 					"src": [
+						"EventsDispatcher.js",
 						"Myo.js",
 						"MyoJS.js",
 					]
 				},
 
-				// contains the websites navigation functionnalities
+				// contains myo websites plugin
 				{
 					"name": "myo-website",
 					"basepath": "assets/js/",
 					"dist": "dist/",
 					"src": [
-						"Myo.js",
-						"MyoJS.js",
+						"ScrollManager.js",
 						"MyoWebsite.js",
 					]
 				}

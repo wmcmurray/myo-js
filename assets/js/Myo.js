@@ -1,7 +1,31 @@
-(function(window)
-{
+(function(window) {
+	'use strict';
+
+	var POSE_EVENTS_EMIT_DELAY = 50;
+
+	// heritence
+	Myo.prototype = new MyoEventsDispatcher;
+	Myo.prototype.constructor = Myo;
+	Myo.prototype.parent = MyoEventsDispatcher.prototype;
+
+	// constants
+	Myo.POSE_THUMB_TO_PINKY = 'thumb_to_pinky';
+	Myo.POSE_FINGERS_SPREAD = 'fingers_spread';
+	Myo.POSE_WAVE_OUT = 'wave_out';
+	Myo.POSE_WAVE_IN = 'wave_in';
+	Myo.POSE_FIST = 'fist';
+	Myo.POSE_REST = 'rest';
+	Myo.VIBRATE_SHORT = 'short';
+	Myo.VIBRATE_MEDIUM = 'medium';
+	Myo.VIBRATE_LONG = 'long';
+
 	/**
 	 *	Represents a single myo armband device
+	 *	@fires STATUS_CHANGED When the device status changes
+	 *	@fires ARM_CHANGED 
+	 *	@fires POSE_CHANGED When the hand pose change
+	 *	@fires POSE_RELEASED When the hand pose is replaced by an other
+	 *	@fires POSE_ADOPTED When the hand pose is adopted
 	 */
 	function Myo(id)
 	{
@@ -13,6 +37,10 @@
 		this.gyroscope = {};
 		this.orientation = {};
 		this.pose = null;
+
+		this.on('BIND_EVENT', onBindEvent.bind(this));
+
+		// this.requestRSSI();
 	};
 
 	var p = Myo.prototype;
@@ -23,6 +51,8 @@
 	p.setStatus = function(status)
 	{
 		this.status = status;
+
+		this.emit('STATUS_CHANGED', this.status);
 	};
 
 	/**
@@ -32,6 +62,8 @@
 	{
 		this.arm = data.arm;
 		this.direction = data.x_direction;
+
+		this.emit('ARM_CHANGED', this.arm, this.direction);
 	};
 
 	/**
@@ -49,7 +81,23 @@
 	 */
 	p.setPose = function(data)
 	{
-		this.pose = data.pose;
+		if(this.poseEventsEmitTimer)
+			clearTimeout(this.poseEventsEmitTimer);
+
+		this.poseEventsEmitTimer = setTimeout(function()
+		{
+			var exPose = this.pose;
+
+			this.pose = data.pose;
+
+			if(exPose != this.pose)
+			{
+				this.emit('POSE_CHANGED', this.status);
+				this.emit('POSE_RELEASED', exPose);
+				this.emit('POSE_ADOPTED', this.pose);
+			}
+			
+		}.bind(this), POSE_EVENTS_EMIT_DELAY);
 	};
 
 	/**
@@ -66,10 +114,40 @@
 	 *	Vibrate the device
 	 *	@intensity {string} (short | medium | long)
 	 */
-	p.vibrate = function(intensity)
+	p.vibrate = function(intensity, repeat)
 	{
-		this.sendCommand('vibrate', {type: intensity || 'short'});
+		if(typeof intensity == 'undefined')
+			intensity = Myo.VIBRATE_SHORT;
+
+		if(typeof repeat == 'undefined')
+			repeat = 1;
+
+		for(var i = 0; i < repeat; i++)
+		{
+			this.sendCommand('vibrate', {type: intensity});
+		}
 	};
+
+	/**
+	 *	Request bluetooth strength
+	 */
+	p.requestRSSI = function()
+	{
+		this.sendCommand('request_rssi', {});
+	};
+
+	/**
+	 *	Triggered when a new event listener is added
+	 */
+	function onBindEvent(name)
+	{
+		switch(name)
+		{
+			case 'STATUS_CHANGED' :
+				this.emit('STATUS_CHANGED', this.status);
+			break;
+		}
+	}
 
 	window.Myo = Myo;
 
