@@ -30,6 +30,7 @@
 	 *	@fires POSE_CHANGED - When the hand pose change
 	 *	@fires POSE_RELEASED - When the hand pose is replaced by an other
 	 *	@fires POSE_ADOPTED - When the hand pose is adopted
+	 *	@fires RSSI_CHANGED - 
 	 */
 	function MyoDevice(id)
 	{
@@ -43,10 +44,9 @@
 		this.gyroscope = {};
 		this.orientation = {};
 		this.pose = null;
+		this.rssi = null;
 
 		this.on('BIND_EVENT', onBindEvent.bind(this));
-
-		// this.requestRSSI();
 	};
 
 	var p = MyoDevice.prototype;
@@ -138,6 +138,16 @@
 	};
 
 	/**
+	 *	Set bluetooth strength
+	 */
+	p.setRSSI = function(data)
+	{
+		this.rssi = data;
+
+		this.emit('RSSI_CHANGED', this.rssi);
+	};
+
+	/**
 	 *	Send a command to the websocket
 	 *	@command {string} Command name
 	 *	@data {object} The data sended with the command
@@ -166,11 +176,21 @@
 	};
 
 	/**
-	 *	Request bluetooth strength
+	 *	Request bluetooth strength (one time or at the specified interval)
+	 *	@interval {int} Specify the interval in which data will be fetched (in milliseconds)
 	 */
-	p.requestRSSI = function()
+	p.requestRSSI = function(interval)
 	{
-		this.sendCommand('request_rssi', {});
+		if(typeof interval == 'undefined')
+			this.sendCommand('request_rssi', {});
+		else
+		{
+			if(this.requestRSSIInterval)
+				clearInterval(this.requestRSSIInterval);
+
+			this.requestRSSI();
+			this.requestRSSIInterval = setInterval(function(){ this.requestRSSI(); }.bind(this), interval);
+		}
 	};
 
 	/**

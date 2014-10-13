@@ -48,6 +48,12 @@
 		// initialize myo-js device detection
 		MyoJS.init();
 
+		// request RSSI of new devices
+		MyoJS.on('NEW_DEVICE', function(device)
+		{
+			device.requestRSSI(500);
+		});
+
 		// update data table interval
 		setInterval(function()
 		{
@@ -63,12 +69,14 @@
 			headers += '<th>Gyroscope</th>';
 			headers += '<th>Orientation</th>';
 			headers += '<th width="150" align="center">Pose</th>';
+			headers += '<th width="150" align="center">RSSI</th>';
 			headers += '</tr>';
 
 			for(var i in devices)
 			{
 				device = devices[i];
 				image = MyoJS.assets.getPoseImage(device);
+
 				str += '<tr>';
 				str += '<td><img src="../_shared/images/myo.png" width="100"></td>';
 				str += '<td>'+device.id+'</td>';
@@ -79,6 +87,7 @@
 				str += '<td>0: '+device.gyroscope[0]+'<br>1: '+device.gyroscope[1]+'<br>2: '+device.gyroscope[2]+'<br></td>';
 				str += '<td>x: '+device.orientation.x+'<br>y: '+device.orientation.y+'<br>z: '+device.orientation.z+'<br>w: '+device.orientation.w+'<br></td>';
 				str += '<td align="center">'+(image?'<img src="'+image+'" width="100" alt="'+device.pose+'"><br>'+device.pose:device.pose)+'</td>';
+				str += '<td align="center" style="font-size:100px;">'+device.rssi+'</td>';
 				str += '</tr>';
 			}
 

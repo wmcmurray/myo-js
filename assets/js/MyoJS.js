@@ -105,16 +105,15 @@
 			{
 				this.plugins[name].instance = new this.plugins[name].constructor(a);
 				this.emit('PLUGIN_INIT', name, this.plugins[name].instance);
-				// console.log('PLUGIN "'+name+'" INITIALIZED.', a);
 			}
 			else
 			{
-				console.warn('PLUGIN "'+name+'" ALREADY INITIALIZED.');
+				console.warn('MyoJS : plugin "'+name+'" already initialized.');
 			}
 		}
 		else
 		{
-			console.warn('PLUGIN "'+name+'" DOSEN\'T EXIST.');
+			console.warn('MyoJS : plugin "'+name+'" dosen\'t exist.');
 		}
 
 		return this;
@@ -208,6 +207,10 @@
 							this.devices[id].setPose(data[1]);
 						break;
 
+						case 'rssi' :
+							this.devices[id].setRSSI(data[1].rssi);
+						break;
+
 						default :
 							console.warn('UNSUPPORTED EVENT:', data[1].type, data[1]);
 						break;
@@ -227,8 +230,7 @@
 	function onOpenHandler(evt)
 	{
 		this.enabled = true;
-		// console.log('Socket opened:', evt);
-		this.emit('SOCKET_OPENED');
+		this.emit('SOCKET_OPENED', evt);
 	}
 
 	/**
@@ -237,8 +239,7 @@
 	function onCloseHandler(evt)
 	{
 		this.enabled = false;
-		// console.error('Socket closed:', evt.code, evt.reason);
-		this.emit('SOCKET_CLOSED');
+		this.emit('SOCKET_CLOSED', evt); // evt.code, evt.reason
 	}
 
 	/**
