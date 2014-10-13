@@ -57,7 +57,6 @@
 			headers += '<th width="100">Image</th>';
 			headers += '<th width="50">#ID</th>';
 			headers += '<th width="50">Status</th>';
-			headers += '<th width="100">Arm Status</th>';
 			headers += '<th width="50">Arm</th>';
 			headers += '<th width="100">Direction</th>';
 			headers += '<th>Accelerometer</th>';
@@ -73,8 +72,7 @@
 				str += '<tr>';
 				str += '<td><img src="../_shared/images/myo.png" width="100"></td>';
 				str += '<td>'+device.id+'</td>';
-				str += '<td>'+device.status+'</td>';
-				str += '<td>'+device.armStatus+'</td>';
+				str += '<td>'+device.pairStatus+'<br>'+device.connectionStatus+'<br>'+device.armStatus+'</td>';
 				str += '<td>'+device.arm+'</td>';
 				str += '<td>'+device.direction+'</td>';
 				str += '<td>0: '+device.accelerometer[0]+'<br>1: '+device.accelerometer[1]+'<br>2: '+device.accelerometer[2]+'<br></td>';
