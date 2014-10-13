@@ -78,7 +78,7 @@
 
 		this.indicator
 			.html(this.device.pose ? (image ? '<img src="'+image+'" alt="'+this.device.pose+'" style="width:100%;height:auto;display:block;">' : '') : (ready ? 'Myo' : '...') )
-			.attr('title', this.device.status + ' - ' + this.device.armStatus);
+			.attr('title', this.device.connectionStatus + ' - ' + this.device.armStatus);
 
 		if(this.device.pose == MyoDevice.POSE_THUMB_TO_PINKY)
 		{
@@ -270,7 +270,7 @@
 	{
 		this.device = device;
 
-		this.device.on('STATUS_CHANGED', onDeviceStatusChangedHandler.bind(this));
+		this.device.on('CONNECTION_STATUS_CHANGED', onDeviceStatusChangedHandler.bind(this));
 		this.device.on('ARM_STATUS_CHANGED', onDeviceArmStatusChangedHandler.bind(this));
 		this.device.on('POSE_ADOPTED', onDevicePoseAdoptedHandler.bind(this));
 		this.device.on('POSE_RELEASED', onDevicePoseReleasedHandler.bind(this));

@@ -176,15 +176,19 @@
 					switch(data[1].type)
 					{
 						case 'paired' :
-							this.devices[id].setStatus(data[1].type);
+							this.devices[id].setPairStatus(data[1].type);
+						break;
+
+						case 'unpaired' :
+							this.devices[id].setPairStatus(data[1].type);
 						break;
 						
 						case 'connected' :
-							this.devices[id].setStatus(data[1].type);
+							this.devices[id].setConnectionStatus(data[1].type);
 						break;
 						
 						case 'disconnected' :
-							this.devices[id].setStatus(data[1].type);
+							this.devices[id].setConnectionStatus(data[1].type);
 						break;
 
 						case 'arm_lost' :

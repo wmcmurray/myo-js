@@ -13,9 +13,11 @@ Ressources
 
 Todo
 ======
+- [x] Handle device unpair event
 - [ ] Use Y velocity with spread fingers pose instead of wave in/out in the website navigator
 - [ ] Save last "locked" state of website plugin in a cookie to keep the same state between pages
 - [ ] Handle bluetooth strength data
-- [ ] Create a demo with a 3D device rotating at the center with orientation datas
+- [x] Create a demo with a 3D device rotating at the center with orientation datas
+- [ ] Transfer the 3D model demo into a plugin
 - [ ] Integrates all of this into nodejs ? maybe ?
 - [ ] Integrates the web navigator into chrome & firefox extensions to enable myo support on all websites of the entire world ! 

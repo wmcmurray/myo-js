@@ -22,9 +22,11 @@
 	/**
 	 *	Represents a single Myo armband device
 	 *
-	 *	@fires STATUS_CHANGED - When the device status changes
+	 *	@fires PAIR_STATUS_CHANGED - When the device pair status changes
+	 *	@fires CONNECTION_STATUS_CHANGED - When the device connection status changes
 	 *	@fires ARM_STATUS_CHANGED - 
 	 *	@fires ARM_CHANGED - 
+	 *	@fires ORIENTATION_CHANGED - 
 	 *	@fires POSE_CHANGED - When the hand pose change
 	 *	@fires POSE_RELEASED - When the hand pose is replaced by an other
 	 *	@fires POSE_ADOPTED - When the hand pose is adopted
@@ -32,7 +34,8 @@
 	function MyoDevice(id)
 	{
 		this.id = id;
-		this.status = null;
+		this.connectionStatus = null;
+		this.pairStatus = null;
 		this.armStatus = null;
 		this.arm = null;
 		this.direction = null;
@@ -54,21 +57,31 @@
 	 */
 	p.isReady = function()
 	{
-		return this.status == 'connected' && this.armStatus == 'arm_recognized' ? true : false;
+		return this.connectionStatus == 'connected' && this.armStatus == 'arm_recognized' ? true : false;
 	};
 
 	/**
-	 *	Set the Myo status (paired | connected | disconnected)
+	 *	Set the Myo pair status (paired | unpaired)
 	 */
-	p.setStatus = function(status)
+	p.setPairStatus = function(status)
 	{
-		this.status = status;
+		this.pairStatus = status;
 
-		this.emit('STATUS_CHANGED', this.status);
+		this.emit('PAIR_STATUS_CHANGED', this.pairStatus);
 	};
 
 	/**
-	 *	Set the Myo arm status (arm_lost | arm_recognized)
+	 *	Set the Myo connection status (connected | disconnected)
+	 */
+	p.setConnectionStatus = function(status)
+	{
+		this.connectionStatus = status;
+
+		this.emit('CONNECTION_STATUS_CHANGED', this.connectionStatus);
+	};
+
+	/**
+	 *	Set the Myo arm status (arm_recognized | arm_lost)
 	 */
 	p.setArmStatus = function(status)
 	{
@@ -96,6 +109,8 @@
 		this.accelerometer 	= data.accelerometer;
 		this.gyroscope 		= data.gyroscope;
 		this.orientation 	= data.orientation;
+
+		this.emit('ORIENTATION_CHANGED', this.orientation);
 	};
 
 	/**
@@ -114,7 +129,7 @@
 
 			if(exPose != this.pose)
 			{
-				this.emit('POSE_CHANGED', this.status);
+				this.emit('POSE_CHANGED', this.pose);
 				this.emit('POSE_RELEASED', exPose);
 				this.emit('POSE_ADOPTED', this.pose);
 			}
@@ -165,8 +180,8 @@
 	{
 		switch(name)
 		{
-			case 'STATUS_CHANGED' :
-				this.emit('STATUS_CHANGED', this.status);
+			case 'CONNECTION_STATUS_CHANGED' :
+				this.emit('CONNECTION_STATUS_CHANGED', this.connectionStatus);
 			break;
 		}
 	}

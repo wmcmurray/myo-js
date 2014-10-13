@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Myo 3D model demo</title>
+	<meta charset="utf-8">
+
+	<!-- myo-js dependencies compiled into one file (jQuery & TweenMax) -->
+	<script type="text/javascript" src="../../dist/myo-dependencies.min.js"></script>
+
+	<!-- myo-js api -->
+	<script type="text/javascript" src="../../dist/myo.min.js"></script>
+
+	<!-- myo-js assets -->
+	<script type="text/javascript" src="../../dist/plugins/myo-assets.min.js"></script>
+
+	<!-- some styling -->
+	<link rel="stylesheet" type="text/css" href="../_shared/css/all.css">
+</head>
+<body>
+	<ul class="other-demos">
+		<li>Available demos:</li>
+		<li><a href="../sandbox/index.html">Sandbox</a></li>
+		<li><a href="../website/index.html">Website</a></li>
+		<li><a href="../3d-model/index.html">3D model</a></li>
+	</ul>
+	<div class="demo">
+		<h1>Myo armband 3D model demo</h1>
+		<p style="width: 40%">**Important : You need to hold the device with logo up and LED indicator away from you, facing your computer screen, while connecting the device into Myo connect for a proper coordinate maping with the 3D model.</p>
+		<div id="data"></div>
+	</div>
+
+	<!-- INITIALIZE THE DEMO -->
+	<script type="text/javascript">
+
+		var device = null, model = jQuery('<div class="myo-device"></div>');
+
+		// initialize myo-js device detection
+		MyoJS.init().on('NEW_DEVICE', function(newDevice)
+		{
+			if(device == null)
+			{
+				device = newDevice;
+
+				device.on('ORIENTATION_CHANGED', function(orientation)
+				{
+					var q = new Quaternion(orientation);
+
+					model.css({transform: q.toRotation()});
+				});
+
+				device.on('PAIR_STATUS_CHANGED', function(status)
+				{
+					switch(status)
+					{
+						case 'paired' :
+							TweenMax.to(led, 0.5, {opacity: 1, ease: Quad.easeOut});
+						break;
+						
+						case 'unpaired' :
+							TweenMax.to(led, 0.5, {opacity: 0, ease: Quad.easeOut});
+						break;
+					}
+				});
+
+				device.on('CONNECTION_STATUS_CHANGED', function(status)
+				{
+					switch(status)
+					{
+						case 'connected' :
+							led.removeClass('orange');
+							TweenMax.to(logo, 0.5, {opacity: 1, ease: Quad.easeOut});
+						break;
+						
+						case 'disconnected' :
+							led.addClass('orange');
+							TweenMax.to(logo, 0.5, {opacity: 0.25, ease: Quad.easeOut});
+						break;
+					}
+				});
+			}
+		});
+
+		// create the device 3D model
+		var box, side, deg, logo, led;
+		var diameter = 300;
+		var rayon = (diameter * 0.5);
+		var boxWidth = 75;
+		var boxHeight = 150;
+		var defaultBoxTickness = 20, bigerBoxesMultiplier = 1.5, boxTickness, isBigger, biggerDecal;
+		var boxesCount = 8;
+		var boxesDegAmount = 360 / boxesCount;
+		var perspective = 900;
+
+		// creat boxes
+		for(var i = 0; i < boxesCount; i++)
+		{
+			box = jQuery('<div class="box box'+(i+1)+'"></div>');
+			deg = boxesDegAmount * i;
+
+			// create box sides
+			for(var j = 1; j <= 6; j++)
+			{
+				side = jQuery('<div class="side side'+j+'"></div>');
+				TweenMax.set(side, {transformPerspective: perspective, transformStyle: 'preserve-3d'});
+
+				isBigger = i > boxesCount -4 ? true : false;
+				boxTickness = isBigger ? defaultBoxTickness * bigerBoxesMultiplier : defaultBoxTickness;
+				biggerDecal = (isBigger ? -(defaultBoxTickness * bigerBoxesMultiplier) + defaultBoxTickness : 0);
+
+				if(j === 1 || j === 2)
+				{
+					TweenMax.set(side, {width: boxWidth, height: boxTickness, marginLeft: boxWidth * -0.5, marginTop: boxTickness * -0.5, y: biggerDecal});
+				}
+
+				if(j === 1)
+				{
+					TweenMax.set(side, {z: boxHeight * 0.5});
+				}
+
+				if(j === 2)
+				{
+					TweenMax.set(side, {z: boxHeight * -0.5});
+				}
+
+				if(j === 3 || j === 4)
+				{
+					TweenMax.set(side, {width: boxWidth, height: boxHeight, marginLeft: boxWidth * -0.5, marginTop: boxHeight * -0.5, rotationZ: 180, rotationX: -90});
+				}
+
+				if(j === 3)
+				{
+					TweenMax.set(side, {y: (boxTickness * -0.5) + biggerDecal});
+
+					if(i === 6)
+					{
+						logo = jQuery('<img src="'+MyoJS.assets.logo+'" alt="">');
+						led = jQuery('<div class="led">&nbsp;</div>');
+						side
+							.append(logo)
+							.append(led);
+						TweenMax.set(logo, {z: 2});
+						TweenMax.set(led, {z: 2});
+					}
+				}
+
+				if(j === 4)
+				{
+					TweenMax.set(side, {y: (boxTickness * 0.5) + biggerDecal});
+				}
+
+				if(j === 5 || j === 6)
+				{
+					TweenMax.set(side, {width: boxTickness, height: boxHeight, marginLeft: boxTickness * -0.5, marginTop: boxHeight * -0.5, rotationX: 90, rotationZ: 90, y: biggerDecal});
+				}
+
+				if(j === 5)
+				{
+					TweenMax.set(side, {x: (boxWidth * 0.5)});
+				}
+
+				if(j === 6)
+				{
+					TweenMax.set(side, {x: (boxWidth * -0.5)});
+				}
+
+				box.append(side);
+			}
+
+			TweenMax.set(box, {transformPerspective: perspective, transformStyle: 'preserve-3d'});
+			TweenMax.set(box,
+			{
+				rotationZ: deg + 90,
+				x: (Math.cos(deg * Math.PI/180) * rayon),
+				y: (Math.sin(deg * Math.PI/180) * rayon)
+			});
+
+			model.append(box);
+		}
+
+		jQuery('#data').append(model);
+
+		TweenMax.set(model, {transformPerspective: perspective, transformStyle: 'preserve-3d', transformOrigin: '50% 50%'});
+		// TweenMax.to(model, 5, {rotationY: 360, rotationX: 360, repeat: -1, ease: Quad.easeInOut});
+
+		function Quaternion(q)
+		{
+			// this.x = q.x || 0;
+			// this.y = q.y || 0;
+			// this.z = q.z || 0;
+			// this.w = q.w || 0;
+
+			// holding device with logo up and led away
+			// z = x
+			// y = z
+			// x = y
+			this.x = -q.y || 0;
+			this.y = q.z || 0;
+			this.z = -q.x || 0;
+			this.w = q.w || 0;
+		}
+
+		Quaternion.prototype.toAxis = function()
+		{
+			return [this.x, this.y, this.z];
+		}
+
+		Quaternion.prototype.toAngle = function()
+		{
+			var RAD2DEG = 180/Math.PI;
+			return RAD2DEG * 2 * Math.acos(this.w);
+		}
+
+		Quaternion.prototype.toRotation = function()
+		{
+			var axis = this.toAxis();
+			var angle = this.toAngle();
+			return "rotate3d(" + axis[0].toFixed(10) + "," + axis[1].toFixed(10) + "," + axis[2].toFixed(10) + "," + angle.toFixed(10) + "deg)";
+		}
+	</script>
+</body>
+</html>

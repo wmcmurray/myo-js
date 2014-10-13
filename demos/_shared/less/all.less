@@ -1,6 +1,7 @@
 @grey-dark: #181816;
 @grey-light: #888;
 @blue: #00BBDE;
+@orange: yellow;
 
 @pathAssets: "../../../assets/";
 
@@ -30,8 +31,35 @@ body
 	color: @blue;
 }
 
+.other-demos
+{
+	padding: 0px 10px;
+	margin: 0px;
+	background: #333;
+
+	li
+	{
+		display: inline-block;
+		color: #888;
+
+		a
+		{
+			display: inline-block;
+			padding: 10px;
+			text-decoration: none;
+			color: inherit;
+
+			&:hover
+			{
+				background: #444;
+			}
+		}
+	}
+}
+
 .demo
 {
+	overflow: hidden;
 	padding: 10px;
 	padding-bottom: 100px;
 
@@ -156,6 +184,107 @@ body
 			.box-shadow(0px 1px 0px rgba(255,255,255,0.5) inset, 0px 10px 10px rgba(255,255,255,0.3) inset, 0px 0px 5px rgba(0,0,0,0.5), 0px 0px 10px fade(@blue, 50%));
 			background-color: lighten(@blue, 10%);
 			color: lighten(@grey-dark, 15%);
+		}
+	}
+
+	.myo-device
+	{
+		@diameter: 300px;
+		@rayon: @diameter * 0.5;
+		@boxWidth: 75px;
+		@boxHeight: 150px;
+		//@boxTickness: 40px;
+
+		//.border-radius(50%);
+		position: relative;
+		width: @diameter;
+		height: @diameter;
+		margin: 150px auto;
+		//background: #000;
+
+		.box
+		{
+			position: absolute;
+			top: 50%;
+			left: 50%;
+			margin-left: -(@boxWidth * 0.5);
+			margin-top: -(@boxHeight * 0.5);
+			width: @boxWidth;
+			height: @boxHeight;
+
+			.side
+			{
+				.border-radius(5px);
+				//.box-shadow(0px 0px 0px 1px rgba(255,255,255,0.15) inset);
+				border: 1px solid #111;
+				position: absolute;
+				top: 50%;
+				left: 50%;
+				background: #000;
+				text-align: center;
+				color: #000;
+				pointer-events: none;
+
+				&.side4
+				{
+					.box-shadow(0px 0px 0px 20px #000 inset);
+					background-color: #111;
+				}
+			}
+
+			&.box7
+			{
+				.side
+				{
+					//background: #080808;
+
+					&.side4
+					{
+						//.box-shadow(0px 0px 0px 20px #080808 inset);
+						//background-color: #111;
+					}
+				}
+
+				.side3
+				{
+					position: relative;
+					// background: @blue;
+					
+					img
+					{
+						@width: 33%;
+
+						.opacity(0);
+						position: absolute;
+						top: 45%;
+						left: 50%;
+						margin-top: @width * -0.5;
+						margin-left: @width * -0.5;
+						display: bloc;
+						width: @width;
+						height: auto;
+					}
+
+					.led
+					{
+						.opacity(0);
+						.border-radius(2px);
+						.box-shadow(0px 0px 10px @blue);
+						position: absolute;
+						bottom: 10%;
+						left: 33%;
+						width: 33%;
+						height: 3%;
+						background-color: @blue;
+
+						&.orange
+						{
+							.box-shadow(0px 0px 10px @orange);
+							background-color: @orange;
+						}
+					}
+				}
+			}
 		}
 	}
 }

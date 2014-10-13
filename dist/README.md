@@ -6,4 +6,4 @@ Distribution files
 
 Plugins
 ======
-In the plugins directory you'll find other files that adds functionnalities to the code API. Those files must be includes **AFTER** the myo.min.js file.
+In the plugins directory you'll find other files that adds functionnalities to the core API. Those files must be includes **AFTER** the myo.min.js file.
