@@ -1,6 +1,8 @@
-An API for using the Myo armband on the web.
+Details
+======
+This project contain an API enabling you to use the Myo armband on the web trough the WebSocket API provided by the Myo Connect. It also include a set of plugins and demos !
 
-**The Myo Connect application must be running** on user's computer for this to work.
+**Myo Connect 0.5.0 or higher must be running** on your computer for this to work.
 
 Project's state
 ======
@@ -8,6 +10,7 @@ It's currently in an early stage so the API may change in the next weeks. I sugg
 
 Ressources
 ======
+- Myo Connect download page : https://developer.thalmic.com/downloads
 - Design guidelines : https://developer.thalmic.com/ux/
 - Assets : https://developer.thalmic.com/branding/
 
